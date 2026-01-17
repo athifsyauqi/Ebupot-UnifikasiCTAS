@@ -117,21 +117,21 @@ cy.get('body').click(0, 0);
     .should('be.visible')
     .click({ force: true });
 
-  cy.get('div.dropdown-content:visible')
-    .should('be.visible')
-    .within(() => {
-      cy.get('input')
-        .clear()
-        .type('0941650236023000');
-    });
+cy.get('div.dropdown-content:visible')
+  .should('be.visible')
+  .within(() => {
+    cy.get('input')
+      .clear()
+      .type('0941650236023000');
+  });
 
 cy.contains(
-  'label.select-box__option',
-  '0941650236023000'
+  'div.pr-3.text-left, label.select-box__option',
+  'NAMA0941650236023000 - 0941650236023000'
 ).click();
 
 cy.get('input[placeholder="Pilih Lawan Dipotong"]')
-  .should('contain.value', '0941650236023000');
+  .should('have.value', 'NAMA0941650236023000 - 0941650236023000');
 
     // ===== JENIS PAJAK =====
   closeModals();
@@ -170,5 +170,78 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
   cy.get('input[placeholder="Pilih objek pajak"]')
     .should('have.value', '24-104-08 Jasa Arsitektur');
 
+    // ===== JUMLAH PENGHASILAN BRUTO =====
+  closeModals();
+  cy.get('#inputCurrency')
+    .scrollIntoView()
+    .should('be.visible')
+    .clear()
+    .type('100000');
+
+    // ===== TAMBAH DOKUMEN =====
+  cy.get('#button-tambah-dokref')
+    .scrollIntoView()
+    .should('be.visible')
+    .click();
+
+  const pilihJenisDokumen = (jenis) => {
+    cy.get('input[placeholder="Pilih Jenis Dokumen"]')
+      .should('be.visible')
+      .click({ force: true });
+    cy.get('div.dropdown-content:visible')
+      .should('be.visible')
+      .contains('div, label, span', jenis)
+      .click({ force: true });
+  };
+
+  pilihJenisDokumen('Pengumuman');
+
+  // ===== NOMOR DOKUMEN =====
+
+  cy.get('input[placeholder="Nomor Dokumen"]')
+    .should('be.visible')
+    .clear()
+    .type('TEST-001');
+
+  // ===== TANGGAL DOKUMEN =====
+  const inputTanggal = (hari, bulan, tahun) => {
+    const bulanAngka = {
+      Januari: '01',
+      Februari: '02',
+      Maret: '03',
+      April: '04',
+      Mei: '05',
+      Juni: '06',
+      Juli: '07',
+      Agustus: '08',
+      September: '09',
+      Oktober: '10',
+      November: '11',
+      Desember: '12',
+    };
+
+    if (!bulanAngka[bulan]) {
+      throw new Error(`Bulan tidak dikenali: ${bulan}`);
+    }
+
+    const tanggalFormat = `${tahun}/${bulanAngka[bulan]}/${String(hari).padStart(2, '0')}`;
+
+    cy.get('input[name="tanggal-dokumen"]')
+      .should('be.visible')
+      .clear()
+      .type(tanggalFormat);
+  };
+
+  inputTanggal('1', 'Januari', '2026');
+
+  // ===== SIMPAN DOKUMEN =====
+  cy.get('#button-simpan-dokref')
+    .scrollIntoView()
+    .should('be.visible')
+    .click();
+
+  
+
   });
 }); 
+    
