@@ -52,6 +52,8 @@ describe("Ebupot Unifikasi - Rekam Bupot", () => {
   });
 
   it("switches company and opens Rekam Bukti Potong", () => {
+    const nitkuValue = "NAMA0717166367077000 - 0717166367077000000000";
+
     selectCompany();
 
     cy.visit("/ctas-ebupot-unifikasi");
@@ -201,7 +203,7 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
   cy.get('input[placeholder="Nomor Dokumen"]')
     .should('be.visible')
     .clear()
-    .type('TEST-001');
+    .type('TEST/CYPRESS/001');
 
   // ===== TANGGAL DOKUMEN =====
   const inputTanggal = (hari, bulan, tahun) => {
@@ -240,7 +242,34 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
     .should('be.visible')
     .click();
 
-  
+  // ===== NITKU =====
+  const pilihNitku = (value) => {
+    cy.get('input[placeholder="Pilih NITKU"]')
+      .scrollIntoView()
+      .should('be.visible')
+      .click({ force: true });
+
+    cy.get('div.dropdown-content:visible')
+      .should('be.visible')
+      .within(() => {
+        cy.get('input[placeholder="Cari"]')
+          .clear()
+          .type(value);
+        cy.contains('div.pr-3.text-left, label.select-box__option', value)
+          .scrollIntoView()
+          .click({ force: true });
+      });
+
+    cy.get('input[placeholder="Pilih NITKU"]').should('have.value', value);
+  };
+
+  pilihNitku(nitkuValue);
+
+  // ===== SIMPAN BUKTI POTONG =====
+  cy.get('#button-simpan-bupot')
+    .scrollIntoView()
+    .should('be.visible')
+    .click(); 
 
   });
 }); 
