@@ -8,4 +8,11 @@ module.exports = defineConfig({
     defaultCommandTimeout: 10000,
     video: false,
   },
+  reporter: "mochawesome",
+  reporterOptions: {
+    reportDir: "cypress/reports/mochawesome",
+    overwrite: false,
+    html: true,
+    json: true,
+  },
 });

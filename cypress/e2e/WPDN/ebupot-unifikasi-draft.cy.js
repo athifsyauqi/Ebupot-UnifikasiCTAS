@@ -1,73 +1,25 @@
 describe("Ebupot Unifikasi - Rekam Bupot", () => {
-  const closeModals = () => {
-    cy.get("body").then(($body) => {
-      const buttons = $body.find('button:contains("Tutup")');
-      if (buttons.length) {
-        cy.wrap(buttons).each((btn) => {
-          cy.wrap(btn).click({ force: true });
-        });
-      }
-    });
-  };
-
-  const selectCompany = () => {
-    cy.get(
-      "#select-company-navbar > div.select-label.mr-auto.value-dropdown-company.card-view > div > svg"
-    )
-      .should("be.visible")
-      .click({ force: true });
-
-    cy.get(
-      "#select-company-navbar > div.select-options.list-plan.card-options"
-    )
-      .should("be.visible")
-      .within(() => {
-        cy.contains("div.select-option.card-option", "0717166367077000")
-          .scrollIntoView()
-          .click({ force: true });
-      });
-
-    cy.get(
-      "#select-company-navbar > div.select-label.mr-auto.value-dropdown-company.card-view"
-    )
-      .should("be.visible")
-      .and("contain", "0717166367077000");
-  };
-
   beforeEach(() => {
-    cy.visit("/login");
-
-    cy.get("input[placeholder=\"email@anda.com\"]")
-      .clear()
-      .type("pengentestefaktur@yopmail.com");
-
-    cy.get("input[placeholder=\"Masukkan password\"]")
-      .clear()
-      .type("aaAA11!!", { log: false });
-
-    cy.contains("button", /^Masuk$/i).click();
-
-    cy.url().should("include", "/dashboard");
-    closeModals();
+    cy.login("pengentestefaktur@yopmail.com", "aaAA11!!");
   });
 
   it("switches company and opens Rekam Bukti Potong", () => {
     const nitkuValue = "NAMA0717166367077000 - 0717166367077000000000";
 
-    selectCompany();
+    cy.selectCompany("0717166367077000");
 
     cy.visit("/ctas-ebupot-unifikasi");
-    closeModals();
+    cy.closeModals();
     cy.get(
       "#select-company-navbar > div.select-label.mr-auto.value-dropdown-company.card-view"
     ).then(($label) => {
       if (!$label.text().includes("0717166367077000")) {
-        selectCompany();
+        cy.selectCompany("0717166367077000");
       }
     });
     cy.contains("button", "PPh Dalam Negeri").click();
     cy.get("#button-rekam-bupot").click();
-    closeModals();
+    cy.closeModals();
 
     // ===== TANGGAL PEMOTONGAN =====
 cy.get('input[name="tanggal-pemotongan"]')
@@ -113,7 +65,7 @@ cy.get('body').click(0, 0);
       .should('have.value', 'Desember 2025'); 
 
     // ===== LAWAN DIPOTONG =====
-  closeModals();
+  cy.closeModals();
   cy.get('input[placeholder="Pilih Lawan Dipotong"]')
     .scrollIntoView()
     .should('be.visible')
@@ -136,7 +88,7 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
   .should('have.value', 'NAMA0941650236023000 - 0941650236023000');
 
     // ===== JENIS PAJAK =====
-  closeModals();
+  cy.closeModals();
   cy.get('input[placeholder="Pilih jenis pajak"]')
     .scrollIntoView()
     .should('be.visible')
@@ -151,7 +103,7 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
     .should('have.value', 'Pasal 23');
 
     // ===== KODE OBJEK PAJAK =====
-  closeModals();
+  cy.closeModals();
   cy.get('input[placeholder="Pilih objek pajak"]')
     .scrollIntoView()
     .should('be.visible')
@@ -173,7 +125,7 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
     .should('have.value', '24-104-08 Jasa Arsitektur');
 
     // ===== JUMLAH PENGHASILAN BRUTO =====
-  closeModals();
+  cy.closeModals();
   cy.get('#inputCurrency')
     .scrollIntoView()
     .should('be.visible')
@@ -270,6 +222,8 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
     .scrollIntoView()
     .should('be.visible')
     .click(); 
+
+  cy.contains('Bupot berhasil dibuat').should('be.visible');
 
   });
 }); 

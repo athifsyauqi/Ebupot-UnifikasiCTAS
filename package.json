@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "cy:run": "cypress run",
+    "cy:report": "cypress run --reporter mochawesome",
+    "report:merge": "mochawesome-merge cypress/reports/mochawesome/*.json > cypress/reports/mochawesome/mochawesome.json",
+    "report:html": "marge cypress/reports/mochawesome/mochawesome.json -f index -o cypress/reports/mochawesome",
     "test": "cypress run"
   },
   "keywords": [],
