@@ -152,10 +152,18 @@ cy.get('input[placeholder="Pilih Lawan Dipotong"]')
 
   // ===== NOMOR DOKUMEN =====
 
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  const docNumber = `TEST/CYPRESS/${y}${m}${d}-${hh}${mm}`;
+
   cy.get('input[placeholder="Nomor Dokumen"]')
     .should('be.visible')
     .clear()
-    .type('TEST/CYPRESS/001');
+    .type(docNumber);
 
   // ===== TANGGAL DOKUMEN =====
   const inputTanggal = (hari, bulan, tahun) => {
