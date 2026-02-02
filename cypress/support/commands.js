@@ -17,12 +17,15 @@ Cypress.Commands.add("selectCompany", (companyId) => {
     .click({ force: true });
 
   cy.get("#select-company-navbar > div.select-options.list-plan.card-options")
-    .should("be.visible")
-    .within(() => {
-      cy.contains("div.select-option.card-option", companyId)
-        .scrollIntoView()
-        .click({ force: true });
-    });
+    .should("be.visible");
+
+  cy.contains(
+    "div.select-option.card-option, label.select-box__option",
+    companyId,
+    { timeout: 10000 }
+  )
+    .scrollIntoView()
+    .click({ force: true });
 
   cy.get(
     "#select-company-navbar > div.select-label.mr-auto.value-dropdown-company.card-view"
