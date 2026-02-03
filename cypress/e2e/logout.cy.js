@@ -1,8 +1,4 @@
 describe("Logout", () => {
-  beforeEach(() => {
-    cy.login("pengentestefaktur@yopmail.com", "aaAA11!!");
-  });
-
   it("logs out from the user menu", () => {
     cy.get(
       "#pajak-io-app > div > div.page-navbar > div.dashboard-header.box-shadow > div.action-menu > svg"

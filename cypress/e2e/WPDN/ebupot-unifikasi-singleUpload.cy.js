@@ -1,10 +1,6 @@
 ﻿describe("Ebupot Unifikasi - Rekam Bupot", () => {
   const createdDocs = [];
 
-  beforeEach(() => {
-    cy.login("pengentestefaktur@yopmail.com", "aaAA11!!");
-  });
-
   it("switches company and opens Rekam Bukti Potong", () => {
     const nitkuValue = "NAMA0717166367077000 - 0717166367077000000000";
     const getNextDocNumber = () => {

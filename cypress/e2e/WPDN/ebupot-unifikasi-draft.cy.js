@@ -1,9 +1,7 @@
 describe("Ebupot Unifikasi - Draft", () => {
-  beforeEach(() => {
-    cy.login("pengentestefaktur@yopmail.com", "aaAA11!!");
-  });
-
   it("fills draft steps", () => {
+    cy.login("pengentestefaktur@yopmail.com", "aaAA11!!");
+    cy.visit("/ctas-ebupot-unifikasi");
     cy.selectCompany("0717166367077000");
     cy.closeModals();
     cy.wait(500);
