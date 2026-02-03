@@ -133,6 +133,7 @@ describe("Ebupot Unifikasi - Draft", () => {
       });
 
     // Step 12: Masa Pajak
+    const masaPajakValue = "Februari 2026";
     cy.get('input[aria-label="Datepicker input"]')
       .eq(1)
       .should("be.visible")
@@ -142,15 +143,45 @@ describe("Ebupot Unifikasi - Draft", () => {
       .should("be.visible")
       .first()
       .within(() => {
-        cy.get('button[aria-label="Previous year"]').click();
-        cy.contains('[role="gridcell"]', "Des").click();
+        const [bulanLabel, tahunLabel] = masaPajakValue.split(" ");
+        const tahunTarget = Number(tahunLabel);
+        const tahunSekarang = new Date().getFullYear();
+        const diffTahun = tahunSekarang - tahunTarget;
+
+        if (diffTahun > 0) {
+          for (let i = 0; i < diffTahun; i += 1) {
+            cy.get('button[aria-label="Previous year"]').click();
+          }
+        } else if (diffTahun < 0) {
+          for (let i = 0; i < Math.abs(diffTahun); i += 1) {
+            cy.get('button[aria-label="Next year"]').click();
+          }
+        }
+
+        const bulanMap = {
+          Januari: "Jan",
+          Februari: "Feb",
+          Maret: "Mar",
+          April: "Apr",
+          Mei: "Mei",
+          Juni: "Jun",
+          Juli: "Jul",
+          Agustus: "Agu",
+          September: "Sep",
+          Oktober: "Okt",
+          November: "Nov",
+          Desember: "Des",
+        };
+
+        const bulanTarget = bulanMap[bulanLabel] || bulanLabel;
+        cy.contains('[role="gridcell"]', bulanTarget).click();
       });
 
     cy.get("body").click(0, 0);
 
     cy.get('input[aria-label="Datepicker input"]')
       .eq(1)
-      .should("have.value", "Desember 2025");
+      .should("have.value", masaPajakValue);
 
     // Step 13: Lawan Dipotong
     cy.get('input[placeholder="Pilih Lawan Dipotong"]')
