@@ -1,15 +1,26 @@
-Cypress.Commands.add("closeModals", () => {
-  // Tutup modal "Tutup" yang sedang tampil agar tidak menghalangi aksi.
+// Custom commands go here.
+
+Cypress.Commands.add("setupEbupot", () => {
+  // Login.
+  cy.visit("/login");
   cy.get("body").then(($body) => {
-    const buttons = $body.find('button:contains("Tutup")');
-    if (buttons.length) {
-      cy.wrap(buttons).each((btn) => cy.wrap(btn).click({ force: true }));
+    const emailInput = $body.find('input[placeholder="email@anda.com"]');
+    if (emailInput.length) {
+      cy.get('input[placeholder="email@anda.com"]')
+        .clear()
+        .type("pengentestefaktur@yopmail.com");
+
+      cy.get('input[placeholder="Masukkan password"]')
+        .clear()
+        .type("aaAA11!!", { log: false });
+
+      cy.contains("button", /^Masuk$/i).click();
     }
   });
-});
 
-Cypress.Commands.add("selectCompany", (companyId) => {
-  // Ganti perusahaan aktif lewat dropdown di navbar.
+  cy.url().should("include", "/dashboard");
+
+  // Select company on dashboard.
   cy.get(
     "#select-company-navbar > div.select-label.mr-auto.value-dropdown-company.card-view > div > svg"
   )
@@ -21,7 +32,7 @@ Cypress.Commands.add("selectCompany", (companyId) => {
 
   cy.contains(
     "div.select-option.card-option, label.select-box__option",
-    companyId,
+    "0717166367077000",
     { timeout: 10000 }
   )
     .scrollIntoView()
@@ -31,21 +42,7 @@ Cypress.Commands.add("selectCompany", (companyId) => {
     "#select-company-navbar > div.select-label.mr-auto.value-dropdown-company.card-view"
   )
     .should("be.visible")
-    .and("contain", companyId);
-});
+    .and("contain", "0717166367077000");
 
-Cypress.Commands.add("login", (email, password) => {
-  // Login ke aplikasi; urutan langkah diatur di beforeEach pada spec.
-  cy.visit("/login");
-
-  cy.get('input[placeholder="email@anda.com"]').clear().type(email);
-
-  cy.get('input[placeholder="Masukkan password"]')
-    .clear()
-    .type(password, { log: false });
-
-  cy.contains("button", /^Masuk$/i).click();
-
-  cy.url().should("include", "/dashboard");
-  cy.closeModals();
+  // Stop at dashboard; navigation to CTAS is handled in spec to avoid redirects.
 });
