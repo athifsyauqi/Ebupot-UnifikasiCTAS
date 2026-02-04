@@ -39,6 +39,11 @@ describe("Ebupot Unifikasi - Import", () => {
       );
 
     // Step 6: Klik Upload
-    cy.contains("button", "Upload").should("be.visible").click();
+    cy.get("#button-confirm-import")
+      .scrollIntoView()
+      .should("be.visible")
+      .and("not.be.disabled");
+    cy.wait(500);
+    cy.get("#button-confirm-import").click({ force: true });
   });
 });
