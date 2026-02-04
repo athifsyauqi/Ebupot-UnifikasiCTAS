@@ -114,7 +114,13 @@ describe("Ebupot Unifikasi - Draft", () => {
     const docNumber = getNextDocNumber();
 
     // Step 11: Tanggal Pemotongan
-    cy.get('input[name="tanggal-pemotongan"]').should("be.visible").click();
+    // Tunggu form siap sepenuhnya sebelum interaksi
+    cy.contains("label", "Tanggal Pemotongan", { timeout: 20000 }).should(
+      "be.visible"
+    );
+    cy.get('input[name="tanggal-pemotongan"]', { timeout: 20000 })
+      .should("be.visible")
+      .click();
 
     cy.get('[role="dialog"]')
       .should("be.visible")

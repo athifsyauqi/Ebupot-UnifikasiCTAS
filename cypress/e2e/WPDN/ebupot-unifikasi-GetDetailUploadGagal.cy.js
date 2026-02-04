@@ -1,11 +1,11 @@
-// cypress/e2e/WPDN/ebupot-unifikasi-GetDetail.cy.js
+// cypress/e2e/WPDN/ebupot-unifikasi-GetDetailUploadGagal.cy.js
 
-describe("Ebupot Unifikasi - GetDetail", () => {
+describe("Ebupot Unifikasi - GetDetail Upload Gagal", () => {
   beforeEach(() => {
-    cy.setupEbupot(); // Login + pilih company
+    cy.setupEbupot();
   });
 
-  it("should get detail", () => {
+  it("should get detail for Upload Gagal", () => {
     // Masuk ke fitur e-Bupot Unifikasi CTAS
     cy.get("#ebupot-unifikasi").should("be.visible");
     cy.get("#ebupot-unifikasi > div.flex.items-center.item-side-nav").click();
@@ -19,7 +19,6 @@ describe("Ebupot Unifikasi - GetDetail", () => {
       "e-Bupot Unifikasi CTAS"
     ).click();
 
-    // Step lanjutan (Get Detail) dari JSON recorder
     cy.url().should("include", "/ctas-ebupot-unifikasi/pph-dalam-negeri/list");
 
     // Pilih Masa Pajak
@@ -77,11 +76,29 @@ describe("Ebupot Unifikasi - GetDetail", () => {
 
     cy.get("body").click(0, 0);
 
+    // Filter status Upload Gagal
+    cy.contains("div.badge", "Upload Gagal")
+      .should("be.visible")
+      .click();
+
+    cy.wait(2000);
+
     cy.get("#button-row-options-0").should("be.visible").click();
+    cy.get("body").then(($body) => {
+      const $alerts = $body.find(".alert-notification-wrapper:visible");
+      if ($alerts.length) {
+        const $close = $alerts.find(
+          'button, [aria-label="Close"], .close, .btn-close'
+        );
+        if ($close.length) {
+          cy.wrap($close.first()).click({ force: true });
+        }
+      }
+    });
     cy.get(
       "div.static-menu.right:nth-of-type(2) > div.flex > div:nth-of-type(2) > div.options.text-center > ul.list-options.shadow > li.option-item.text-left:nth-of-type(1)"
     )
       .should("be.visible")
-      .click();
+      .click({ force: true });
   });
 });
