@@ -1,4 +1,6 @@
 // Custom commands go here.
+const { createEbupotDraft } = require("./ebupotBPPUDraft");
+const { singleUploadDraft } = require("./SingleUpload");
 
 Cypress.Commands.add("setupEbupot", () => {
   // Login.
@@ -46,3 +48,6 @@ Cypress.Commands.add("setupEbupot", () => {
 
   // Stop at dashboard; navigation to CTAS is handled in spec to avoid redirects.
 });
+
+Cypress.Commands.add("createEbupotDraft", createEbupotDraft);
+Cypress.Commands.add("singleUploadDraft", singleUploadDraft);

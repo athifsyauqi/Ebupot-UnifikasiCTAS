@@ -4,7 +4,7 @@ const path = require("path");
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: "http://my.staging.pajak.io",
+    baseUrl: "http://my.preproduction.pajak.io/",
     viewportWidth: 1280,
     viewportHeight: 720,
     defaultCommandTimeout: 10000,
